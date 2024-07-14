@@ -21,9 +21,15 @@ namespace DataAccess.Data
             _entities = context.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync(string includeProperties = "")
         {
-            return await _entities.ToListAsync();
+            IQueryable<T> query = _entities;
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+            return await query.ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(int id)

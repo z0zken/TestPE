@@ -1,4 +1,6 @@
-﻿namespace DataAccess.Models
+﻿using System.Text.Json.Serialization;
+
+namespace DataAccess.Models
 {
     public class Product
     {

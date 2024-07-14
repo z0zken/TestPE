@@ -20,7 +20,7 @@ namespace BusinessLayer.Services
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            return await _productRepository.GetAllAsync();
+            return await _productRepository.GetAllAsync(includeProperties: "Supplier");
         }
 
         public async Task<Product> GetProductByIdAsync(int id)
@@ -63,7 +63,7 @@ namespace BusinessLayer.Services
 
         public async Task<IEnumerable<Supplier>> GetAllSuppliersAsync()
         {
-            return await _supplierRepository.GetAllAsync();
+            return await _supplierRepository.GetAllAsync(includeProperties: "Address");
         }
 
         public async Task<Supplier> GetSupplierByIdAsync(int id)
