@@ -1,0 +1,68 @@
+﻿@model BusinessLayer.LoginModel
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Login</div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="Username" class="form-label">Username</label>
+                        <input asp-for="Username" id="username" type="text" class="form-control" id="Username" name="Username">
+                        <span class="text-danger" asp-validation-for="Username"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Password" class="form-label">Password</label>
+                        <input asp-for="Password" type="password" id="password" class="form-control" id="Password" name="Password">
+                        <span class="text-danger" asp-validation-for="Password"></span>
+
+                    </div>
+                    <button type="submit" class="btn btn-primary" onclick="login()">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsrsasign@10.4.1/lib/jsrsasign-all-min.js"></script>
+
+<script type="text/javascript">
+    function login() {
+        const username = $('#username').val();
+        const password = $('#password').val();
+
+        $.ajax({
+            url: 'https://localhost:7170/api/Auth/login',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ username, password }),
+            success: function (response) {
+                const token = response.token;
+                sessionStorage.setItem("token", token);
+                $.ajaxSetup({
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const decodedToken = KJUR.jws.JWS.parse(token);
+                const payload = decodedToken.payloadObj;
+
+                sessionStorage.setItem('UserId', payload['nameid']);
+                sessionStorage.setItem('UserRole', payload['role']);
+                sessionStorage.setItem('UserName', payload['unique_name']);
+
+                window.location.href = '/Products/Index';
+            },
+            error: function (xhr, status, error) {
+                alert('You are not allowed to access this function!');
+            }
+        });
+    }
+</script>

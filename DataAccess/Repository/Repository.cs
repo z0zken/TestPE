@@ -116,3 +116,18 @@ namespace DataAccess.Data
         }
     }
 }
+
+namespace DataAccess.Data
+{
+    public class AccountRepository : Repository<Account>, IAccountRepository
+    {
+        public AccountRepository(ApplicationContext context) : base(context)
+        {
+        }
+
+        public async Task<Account> GetAccountWithUsernameAndPassword(string username, string password)
+        {
+            return await _context.Account.FirstOrDefaultAsync(a => a.Username == username && a.Password == password);
+        }
+    }
+}

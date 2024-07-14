@@ -42,3 +42,17 @@ namespace BusinessLayer.Services
         Task DeleteAddressAsync(int id);
     }
 }
+
+// IAccountService.cs
+namespace BusinessLayer.Services
+{
+    public interface IAccountService
+    {
+        Task<IEnumerable<Account>> GetAllAccount();
+        Task<Account> GetAccountByIdAsync(int id);
+        Task AddAccountAsync(Account Account);
+        Task UpdateAccountAsync(Account Account);
+        Task DeleteAccountAsync(int id);
+        Task<Account> GetAccountWithUsernameAndPassword(string username, string password);
+    }
+}

@@ -26,8 +26,16 @@ namespace API.Controllers
 
         [HttpGet]
         [EnableQuery]
-        [Authorize(Policy = "StaffAndAbove")]
         public async Task<IActionResult> GetAll()
+        {
+            var products = await _productService.GetAllProductsAsync();
+            return Ok(products);
+        }
+
+        [HttpGet("Search")]
+        [EnableQuery]
+        [Authorize(Policy = "StaffAndAbove")]
+        public async Task<IActionResult> GetAllSearch()
         {
             var products = await _productService.GetAllProductsAsync();
             return Ok(products);

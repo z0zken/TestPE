@@ -1,0 +1,102 @@
+﻿@model DataAccess.Models.Product
+
+<h2>Edit Product</h2>
+
+    <div class="form-horizontal">
+        <h4>Product</h4>
+        <input hidden asp-for="Id" />
+        <hr />
+    <div class="form-group">
+        <label asp-for="SupplierId" class="control-label"></label>
+        <input asp-for="SupplierId" id="SupplierId" class="form-control" />
+        <span asp-validation-for="SupplierId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" id="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <input asp-for="Description" id="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Price" class="control-label"></label>
+        <input asp-for="Price" id="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CreateYear" class="control-label"></label>
+        <input asp-for="CreateYear" id="CreateYear" class="form-control" />
+        <span asp-validation-for="CreateYear" class="text-danger"></span>
+    </div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="submit btn btn-primary" />
+        </div>
+    </div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+    var product = {};
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const id = urlParams.get('id')
+
+    $(document).ready(function () {
+        ShowProduct();
+        function ShowProduct() {
+            $.ajax(
+                {
+                    url: "https://localhost:7170/api/Products/" + id,
+                    type: "get",
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    contentType: "application/json",
+                    success: function (result, status, xhr) {
+                        product = result;
+                        $('#Name').val(product.name);
+                        $('#SupplierId').val(product.supplierId);
+                        $('#Description').val(product.description || '');
+                        $('#Price').val(product.price || '');
+                        $('#CreateYear').val(product.createYear || '');
+                        console.log(product);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr);
+                    }
+                }
+            );
+            $(".submit").on("click", function () {
+                product.name = document.getElementById("Name").value
+                product.supplierId = document.getElementById("SupplierId").value
+                product.description = document.getElementById("Description").value
+                product.price = document.getElementById("Price").value
+                product.createYear = document.getElementById("CreateYear").value
+
+                $.ajax({
+                    url: "https://localhost:7170/api/Products/" + id,
+                    type: "PUT",
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    contentType: "application/json",
+                    data: JSON.stringify(product),
+                    success: function (result, status, xhr) {
+                        window.location.href = '/Products/Index';
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr);
+                    }
+                });
+            })
+        }
+    });
+</script>

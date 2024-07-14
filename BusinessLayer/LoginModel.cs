@@ -1,4 +1,4 @@
-﻿namespace API
+﻿namespace BusinessLayer
 {
     public class LoginModel
     {

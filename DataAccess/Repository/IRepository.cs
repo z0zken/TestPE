@@ -46,3 +46,11 @@ namespace DataAccess.Data
     {
     }
 }
+
+namespace DataAccess.Data
+{
+    public interface IAccountRepository : IRepository<Account>
+    {
+        Task<Account> GetAccountWithUsernameAndPassword(string username, string password);
+    }
+}

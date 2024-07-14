@@ -1,4 +1,5 @@
-﻿using BusinessLayer.Services;
+﻿using BusinessLayer;
+using BusinessLayer.Services;
 using DataAccess.Data;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
@@ -12,19 +13,18 @@ namespace API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ITokenService _tokenService;
-        private readonly ApplicationContext _context;
+        private readonly IAccountService _accountService;
 
-        public AuthController(ITokenService tokenService, ApplicationContext context)
+        public AuthController(ITokenService tokenService, IAccountService accountService)
         {
             _tokenService = tokenService;
-            _context = context;
+            _accountService = accountService;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel login)
         {
-            var account = await _context.Account
-                .FirstOrDefaultAsync(a => a.Username == login.Username && a.Password == login.Password);
+            var account = await _accountService.GetAccountWithUsernameAndPassword(login.Username, login.Password);
 
             if (account == null)
                 return Unauthorized();

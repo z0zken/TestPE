@@ -135,3 +135,51 @@ namespace BusinessLayer.Services
     }
 }
 
+
+// AccountService.cs
+namespace BusinessLayer.Services
+{
+    public class AccountService : IAccountService
+    {
+        private readonly IAccountRepository _AccountRepository;
+
+        public AccountService(IAccountRepository AccountRepository)
+        {
+            _AccountRepository = AccountRepository;
+        }
+
+        public async Task<IEnumerable<Account>> GetAllAccount()
+        {
+            return await _AccountRepository.GetAllAsync();
+        }
+
+        public async Task<Account> GetAccountByIdAsync(int id)
+        {
+            return await _AccountRepository.GetByIdAsync(id);
+        }
+
+        public async Task AddAccountAsync(Account address)
+        {
+            await _AccountRepository.AddAsync(address);
+        }
+
+        public async Task UpdateAccountAsync(Account address)
+        {
+            await _AccountRepository.Update(address);
+        }
+
+        public async Task DeleteAccountAsync(int id)
+        {
+            var address = await _AccountRepository.GetByIdAsync(id);
+            if (address != null)
+            {
+                await _AccountRepository.Remove(address);
+            }
+        }
+
+        public async Task<Account> GetAccountWithUsernameAndPassword(string username, string password)
+        {
+            return await _AccountRepository.GetAccountWithUsernameAndPassword(username, password);
+        }
+    }
+}
