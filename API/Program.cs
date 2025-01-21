@@ -66,7 +66,6 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("StaffAndAbove", policy => policy.RequireRole("Staff", "Manager"));
 });
 
-builder.Services.AddCors();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddControllers();

@@ -33,6 +33,7 @@ namespace DataAccess.Data
         public DbSet<Supplier> Supplier { get; set; } = default!;
         public DbSet<Address> Address { get; set; } = default!;
         public DbSet<Account> Account { get; set; } = default!;
+        public DbSet<Article> Article { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
